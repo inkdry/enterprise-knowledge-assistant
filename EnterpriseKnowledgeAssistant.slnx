@@ -8,6 +8,7 @@
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
   </Folder>
+  <Project Path="EnterpriseKnowledge.Api.Tests/EnterpriseKnowledge.Api.Tests.csproj" />
   <Project Path="EnterpriseKnowledge.Api/EnterpriseKnowledge.Api.csproj" />
   <Project Path="EnterpriseKnowledge.Application/EnterpriseKnowledge.Application.csproj" />
   <Project Path="EnterpriseKnowledge.Domain/EnterpriseKnowledge.Domain.csproj" />
