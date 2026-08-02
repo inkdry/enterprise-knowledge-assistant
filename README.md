@@ -3,6 +3,8 @@
 A secure, enterprise-grade knowledge assistant built with ASP.NET Core,
 Azure, and generative AI.
 
+[![Build and Test](https://github.com/inkdry/enterprise-knowledge-assistant/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/inkdry/enterprise-knowledge-assistant/actions/workflows/build-and-test.yml)
+
 ## Project Goal
 
 Organizations often have valuable information distributed across policies,
