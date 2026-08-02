@@ -70,16 +70,27 @@ public sealed class KnowledgeDocument
 
     public void MarkAsProcessing()
     {
-        Status = DocumentStatus.Processing;
+        TransitionFrom(DocumentStatus.Pending, DocumentStatus.Processing);               
     }
 
     public void MarkAsReady()
     {
-        Status = DocumentStatus.Ready;
+        TransitionFrom(DocumentStatus.Processing, DocumentStatus.Ready);
     }
 
     public void MarkAsFailed()
     {
-        Status = DocumentStatus.Failed;
+        TransitionFrom(DocumentStatus.Processing, DocumentStatus.Failed);
+    }
+
+    private void TransitionFrom(DocumentStatus expectedCurrentStatus, DocumentStatus newStatus)
+    {
+        if (Status != expectedCurrentStatus)
+        {
+            throw new InvalidOperationException(
+                $"A document cannot transition from {Status} to {newStatus}.");
+        }
+
+        Status = newStatus;
     }
 }

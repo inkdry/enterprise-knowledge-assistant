@@ -8,15 +8,10 @@ public sealed class KnowledgeDocumentTests
     public void Create_WithValidValues_CreatesPendingDocument()
     {
         // Arrange
-        var uploadedAt = new DateTimeOffset(
-            2026, 8, 2, 12, 0, 0, TimeSpan.Zero);
+        var uploadedAt = new DateTimeOffset( 2026, 8, 2, 12, 0, 0, TimeSpan.Zero);
 
         // Act
-        var document = KnowledgeDocument.Create(
-            "security-policy.pdf",
-            "application/pdf",
-            1_024,
-            uploadedAt);
+        var document = KnowledgeDocument.Create("security-policy.pdf", "application/pdf", 1_024, uploadedAt);
 
         // Assert
         Assert.NotEqual(Guid.Empty, document.Id);
@@ -30,8 +25,7 @@ public sealed class KnowledgeDocumentTests
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
-    public void Create_WithoutFileName_ThrowsArgumentException(
-        string fileName)
+    public void Create_WithoutFileName_ThrowsArgumentException(string fileName)
     {
         var exception = Assert.Throws<ArgumentException>(() =>
             KnowledgeDocument.Create(
@@ -46,8 +40,7 @@ public sealed class KnowledgeDocumentTests
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
-    public void Create_WithoutContentType_ThrowsArgumentException(
-        string contentType)
+    public void Create_WithoutContentType_ThrowsArgumentException(string contentType)
     {
         var exception = Assert.Throws<ArgumentException>(() =>
             KnowledgeDocument.Create(
@@ -62,8 +55,7 @@ public sealed class KnowledgeDocumentTests
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
-    public void Create_WithInvalidFileSize_ThrowsArgumentOutOfRangeException(
-        long sizeInBytes)
+    public void Create_WithInvalidFileSize_ThrowsArgumentOutOfRangeException(long sizeInBytes)
     {
         var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
             KnowledgeDocument.Create(
@@ -76,26 +68,53 @@ public sealed class KnowledgeDocumentTests
     }
 
     [Fact]
-    public void StatusTransitions_UpdateDocumentStatus()
+    public void MarkAsReady_AfterProcessing_SetsStatusToReady()
     {
         var document = CreateDocument();
 
         document.MarkAsProcessing();
-        Assert.Equal(DocumentStatus.Processing, document.Status);
-
         document.MarkAsReady();
-        Assert.Equal(DocumentStatus.Ready, document.Status);
 
+        Assert.Equal(DocumentStatus.Ready, document.Status);
+    }
+
+    [Fact]
+    public void MarkAsFailed_AfterProcessing_SetsStatusToFailed()
+    {
+        var document = CreateDocument();
+
+        document.MarkAsProcessing();
         document.MarkAsFailed();
+
         Assert.Equal(DocumentStatus.Failed, document.Status);
     }
 
+    [Fact]
+    public void MarkAsReady_WhenPending_ThrowsInvalidOperationException()
+    {
+        var document = CreateDocument();
+
+        var exception = Assert.Throws<InvalidOperationException>(document.MarkAsReady);
+
+        Assert.Contains("Pending to Ready", exception.Message);
+    }
+
+    [Fact]
+    public void MarkAsProcessing_WhenReady_ThrowsInvalidOperationException()
+    {
+        var document = CreateDocument();
+        document.MarkAsProcessing();
+        document.MarkAsReady();
+
+        var exception = Assert.Throws<InvalidOperationException>(document.MarkAsProcessing);
+
+        Assert.Contains("Ready to Processing", exception.Message);
+    }
+
+
+
     private static KnowledgeDocument CreateDocument()
     {
-        return KnowledgeDocument.Create(
-            "security-policy.pdf",
-            "application/pdf",
-            1_024,
-            DateTimeOffset.UtcNow);
+        return KnowledgeDocument.Create("security-policy.pdf", "application/pdf", 1_024, DateTimeOffset.UtcNow);
     }
 }
