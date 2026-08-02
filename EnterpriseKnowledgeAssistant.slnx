@@ -11,6 +11,7 @@
   <Project Path="EnterpriseKnowledge.Api.Tests/EnterpriseKnowledge.Api.Tests.csproj" />
   <Project Path="EnterpriseKnowledge.Api/EnterpriseKnowledge.Api.csproj" />
   <Project Path="EnterpriseKnowledge.Application/EnterpriseKnowledge.Application.csproj" />
+  <Project Path="EnterpriseKnowledge.Domain.Tests/EnterpriseKnowledge.Domain.Tests.csproj" />
   <Project Path="EnterpriseKnowledge.Domain/EnterpriseKnowledge.Domain.csproj" />
   <Project Path="EnterpriseKnowledge.Infrastructure/EnterpriseKnowledge.Infrastructure.csproj" />
 </Solution>
