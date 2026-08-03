@@ -10,6 +10,7 @@
   </Folder>
   <Project Path="EnterpriseKnowledge.Api.Tests/EnterpriseKnowledge.Api.Tests.csproj" />
   <Project Path="EnterpriseKnowledge.Api/EnterpriseKnowledge.Api.csproj" />
+  <Project Path="EnterpriseKnowledge.Application.Tests/EnterpriseKnowledge.Application.Tests.csproj" Id="f69e47dd-a80d-4b51-bfcb-2a6c60c48f80" />
   <Project Path="EnterpriseKnowledge.Application/EnterpriseKnowledge.Application.csproj" />
   <Project Path="EnterpriseKnowledge.Domain.Tests/EnterpriseKnowledge.Domain.Tests.csproj" />
   <Project Path="EnterpriseKnowledge.Domain/EnterpriseKnowledge.Domain.csproj" />
