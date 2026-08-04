@@ -1,14 +1,6 @@
-@EnterpriseKnowledge.Api_HostAddress = https://localhost:7126
 @host = https://localhost:7126
 
-POST {{host}}/api/documents
-Content-Type: application/json
+### Get document by ID
 
-{
-  "fileName": "security-policy.pdf",
-  "contentType": "application/pdf",
-  "sizeInBytes": 1024
-}
-
-
-
+GET {{host}}/api/documents/b1c11d7e-7ff9-4788-bec7-1b691200e872
+Accept: application/json

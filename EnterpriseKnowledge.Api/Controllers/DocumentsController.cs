@@ -7,19 +7,50 @@ namespace EnterpriseKnowledge.Api.Controllers;
 [ApiController]
 [Route("api/documents")]
 public sealed class DocumentsController(
-    IDocumentRegistrationService registrationService) : ControllerBase
+    IDocumentRegistrationService registrationService,
+    IDocumentQueryService queryService) : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType<RegisterDocumentResult>(StatusCodes.Status201Created)]
-    [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<RegisterDocumentResult>(
+        StatusCodes.Status201Created)]
+    [ProducesResponseType<ValidationProblemDetails>(
+        StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<RegisterDocumentResult>> RegisterAsync(
         [FromBody] RegisterDocumentRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new RegisterDocumentCommand(request.FileName, request.ContentType, request.SizeInBytes);
+        var command = new RegisterDocumentCommand(
+            request.FileName,
+            request.ContentType,
+            request.SizeInBytes);
 
-        var result = await registrationService.RegisterAsync(command, cancellationToken);
+        var result = await registrationService.RegisterAsync(
+            command,
+            cancellationToken);
 
-        return Created($"/api/documents/{result.Id}", result);
+        return CreatedAtAction(
+            nameof(GetByIdAsync),
+            new { id = result.Id },
+            result);
+    }
+
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType<DocumentDetailsResult>(
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<DocumentDetailsResult>> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var result = await queryService.GetByIdAsync(
+            id,
+            cancellationToken);
+
+        if (result is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
     }
 }
