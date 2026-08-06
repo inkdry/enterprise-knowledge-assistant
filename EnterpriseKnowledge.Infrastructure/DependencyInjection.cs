@@ -3,6 +3,7 @@ using EnterpriseKnowledge.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using EnterpriseKnowledge.Infrastructure.Storage;
 
 namespace EnterpriseKnowledge.Infrastructure;
 
@@ -20,6 +21,15 @@ public static class DependencyInjection
         services.AddDbContext<KnowledgeDbContext>(options => options.UseSqlServer(connectionString));
 
         services.AddScoped<IDocumentRepository, DocumentRepository>();
+
+        var storagePath = configuration["DocumentStorage:RootPath"];
+
+        if (string.IsNullOrWhiteSpace(storagePath))
+        {
+            throw new InvalidOperationException("The document storage path is not configured.");
+        }
+
+        services.AddSingleton<IDocumentContentStore>(new FileSystemDocumentContentStore(storagePath));
 
         return services;
     }

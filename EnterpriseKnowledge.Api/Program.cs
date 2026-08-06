@@ -19,6 +19,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IDocumentRegistrationService, DocumentRegistrationService>();
 builder.Services.AddScoped<IDocumentQueryService, DocumentQueryService>();
+builder.Services.AddScoped<IDocumentUploadService, DocumentUploadService>();
 
 
 var app = builder.Build();
