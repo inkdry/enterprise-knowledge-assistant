@@ -28,16 +28,15 @@ public sealed class DocumentsController(
             command,
             cancellationToken);
 
-        return CreatedAtAction(
-            nameof(GetByIdAsync),
-            new { id = result.Id },
-            result);
+        return CreatedAtRoute("GetDocumentById", new { id = result.Id }, result);
     }
 
-    [HttpGet("{id:guid}")]
+
+    [HttpGet("{id:guid}", Name = "GetDocumentById")]
     [ProducesResponseType<DocumentDetailsResult>(
         StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+
     public async Task<ActionResult<DocumentDetailsResult>> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken)
