@@ -37,7 +37,7 @@ public static class DependencyInjection
             ? configuredPath
             : Path.Combine(contentRootPath, configuredPath);
 
-        services.AddSingleton<IDocumentContentStore>(new FileSystemDocumentContentStore(storagePath));
+        services.AddSingleton<IDocumentContentStore>(_ => new FileSystemDocumentContentStore(storagePath));
 
         return services;
     }
