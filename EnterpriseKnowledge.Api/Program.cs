@@ -15,7 +15,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IDocumentRegistrationService, DocumentRegistrationService>();
 builder.Services.AddScoped<IDocumentQueryService, DocumentQueryService>();

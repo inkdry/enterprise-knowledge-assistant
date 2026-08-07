@@ -1,6 +1,46 @@
+@EnterpriseKnowledge.Api_HostAddress = https://localhost:7126
 @host = https://localhost:7126
 
 ### Get document by ID
 
 GET {{host}}/api/documents/b1c11d7e-7ff9-4788-bec7-1b691200e872
 Accept: application/json
+
+### Upload a text document
+
+POST {{host}}/api/documents/upload
+Content-Type: multipart/form-data; boundary=document-boundary
+
+--document-boundary
+Content-Disposition: form-data; name="file"; filename="security-policy.txt"
+Content-Type: text/plain
+
+All systems must use multi-factor authentication.
+--document-boundary--
+
+
+POST {{EnterpriseKnowledge.Api_HostAddress}}/api/documents
+Content-Type: application/json
+
+{
+  //RegisterDocumentRequest
+}
+
+###
+
+POST {{EnterpriseKnowledge.Api_HostAddress}}/api/documents
+Content-Type: application/json
+
+{
+  //RegisterDocumentRequest
+}
+
+###
+
+GET {{EnterpriseKnowledge.Api_HostAddress}}/api/documents/{id:guid}
+
+###
+
+GET {{EnterpriseKnowledge.Api_HostAddress}}/api/documents/b1c11d7e-7ff9-4788-bec7-1b691200e872
+
+###

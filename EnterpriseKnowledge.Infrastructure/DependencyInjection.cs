@@ -9,7 +9,10 @@ namespace EnterpriseKnowledge.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+    this IServiceCollection services,
+    IConfiguration configuration,
+    string contentRootPath)
     {
         var connectionString = configuration.GetConnectionString("KnowledgeDatabase");
 
@@ -22,12 +25,17 @@ public static class DependencyInjection
 
         services.AddScoped<IDocumentRepository, DocumentRepository>();
 
-        var storagePath = configuration["DocumentStorage:RootPath"];
+        var configuredPath = configuration["DocumentStorage:RootPath"];
 
-        if (string.IsNullOrWhiteSpace(storagePath))
+        if (string.IsNullOrWhiteSpace(configuredPath))
         {
             throw new InvalidOperationException("The document storage path is not configured.");
         }
+
+        // Resolve relative storage beneath the API project.
+        var storagePath = Path.IsPathRooted(configuredPath)
+            ? configuredPath
+            : Path.Combine(contentRootPath, configuredPath);
 
         services.AddSingleton<IDocumentContentStore>(new FileSystemDocumentContentStore(storagePath));
 

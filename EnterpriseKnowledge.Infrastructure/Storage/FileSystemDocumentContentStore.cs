@@ -32,21 +32,24 @@ public sealed class FileSystemDocumentContentStore : IDocumentContentStore
 
         try
         {
-            // Write to a temporary file before publishing the content.
-            await using var output = new FileStream(temporaryPath,
+            // Close the temporary file before moving it.
+            await using (var output = new FileStream(
+                temporaryPath,
                 new FileStreamOptions
                 {
                     Mode = FileMode.CreateNew,
                     Access = FileAccess.Write,
                     Share = FileShare.None,
                     BufferSize = 81_920,
-                    Options = FileOptions.Asynchronous | FileOptions.SequentialScan
-                });
+                    Options = FileOptions.Asynchronous
+                        | FileOptions.SequentialScan
+                }))
+            {
+                await content.CopyToAsync(output, cancellationToken);
+                await output.FlushAsync(cancellationToken);
+            }
 
-            await content.CopyToAsync(output, cancellationToken);
-            await output.FlushAsync(cancellationToken);
-
-            // Generated IDs prevent client-controlled file paths.
+            // Publish the completed file after its handle is closed.
             File.Move(temporaryPath, finalPath);
         }
         catch
